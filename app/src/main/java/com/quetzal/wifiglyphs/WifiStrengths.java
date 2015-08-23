@@ -34,4 +34,5 @@ public class WifiStrengths extends Strengths {
     public long getItemId(int position) { return getItem(position).hashCode(); }
     @Override
     public int getStrength(int position) { return m_w.calculateSignalLevel(m_lsr.get(position).level, 100); }
+
 }

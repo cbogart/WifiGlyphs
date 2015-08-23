@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -27,8 +29,14 @@ import java.util.List;
 
 public class Strengths extends BaseAdapter {
     Context context;
+    HashMap<Long, Integer> reverseIdLookup = new HashMap<Long, Integer>();
     public Strengths(Context c) {
         context = c;
+    }
+    void populateHashMap() {
+        for(int i=0; i<getCount(); i++) {
+            reverseIdLookup.put(getItemId(i),i);
+        }
     }
     public int getCount() {
         return 15;
@@ -39,9 +47,14 @@ public class Strengths extends BaseAdapter {
     public long getItemId(int position) {
         return 4129389 + position;
     }
-    public int getStrength(int position) {
-        return ((position+6)%15)*7;
+    public int getStrength(int position) { return ((position+6)%15)*7; }
+    public int getStrengthId(long id) {
+        if (reverseIdLookup.isEmpty()) {
+            populateHashMap();
+        }
+        return getStrength(reverseIdLookup.get(id));
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup container) {
         if (convertView == null) {

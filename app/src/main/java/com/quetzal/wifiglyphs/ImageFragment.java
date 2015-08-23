@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -11,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import java.util.Random;
 
 
 /**
@@ -77,6 +82,7 @@ public class ImageFragment extends Fragment  {
 
     }
 
+    Rect bbox = null;
 
     public void strengthsChanged(Strengths s) {
         ImageView img = (ImageView)getView().findViewById(R.id.imageView);
@@ -87,7 +93,10 @@ public class ImageFragment extends Fragment  {
         Canvas c = new Canvas(bmp);
         //img.draw(c);
 
-        for (int sigid=0; sigid<s.getCount(); sigid++) {
+        if (bbox == null) { bbox = new Rect(-10000,-10000,10000,10000); }
+        Glyph g = new Glyph(s);
+        g.draw(c, bbox);
+        /*for (int sigid=0; sigid<s.getCount(); sigid++) {
             // TODO: don't need to regenerate these objects every time.
             // TODO: in fact, keep old strength, and only baby-step it toward the new strength, so you get a smooth animation.
             // TODO: attend to only the strongest signal per distinct name; ignore duplicate "xfinitywifi"s and just take the max
@@ -97,10 +106,13 @@ public class ImageFragment extends Fragment  {
             it.transform(c, s.getStrength(sigid));
 
         }
-        //Random r = new Random();
-        //Paint p = new Paint();
-        //p.setColor(Color.BLUE);
-        //c.drawLine(r.nextInt(200), r.nextInt(200), img.getWidth()-1, img.getHeight()-1, p);
+        Random r = new Random();
+        Paint p = new Paint();
+        p.setColor(Color.WHITE);
+        System.out.println("Limits: " + img.getWidth() + " " + img.getHeight());
+        c.drawLine(r.nextInt(200), r.nextInt(200), img.getWidth() - r.nextInt(200), img.getHeight() - r.nextInt(200), p);
+        //c.drawLine(0,0,img.getWidth()-1, img.getHeight()-1, p);
+        */
         img.setImageBitmap(bmp);
     }
 }
