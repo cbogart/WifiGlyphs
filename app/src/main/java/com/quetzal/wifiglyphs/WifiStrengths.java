@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -22,6 +24,21 @@ public class WifiStrengths extends Strengths {
         super(c);
         if (w != null) {
             m_lsr = w.getScanResults();
+
+            // Sort by strength and take top 10
+            Collections.sort(m_lsr, new Comparator<ScanResult>() {
+                public int compare(ScanResult o1, ScanResult o2) {
+                    return o1.level - o2.level;
+                }
+            });
+            m_lsr = m_lsr.subList(0,Math.min(10,m_lsr.size()));
+
+            // Then sort by name so they don't change order
+            Collections.sort(m_lsr, new Comparator<ScanResult>() {
+                public int compare(ScanResult o1, ScanResult o2) {
+                    return o1.SSID.compareTo(o2.SSID);
+                }
+            });
             m_w = w;
         }
     }
